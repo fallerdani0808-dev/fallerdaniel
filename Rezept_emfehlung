@@ -1,0 +1,350 @@
+import random
+import tkinter as tk
+
+class Rezept:
+    def __init__(self, name, kategorie, zeit, kurzbeschreibung, rezept_text):
+        self.name = name
+        self.kategorie = kategorie  # 'fleisch' oder 'ohne'
+        self.zeit = zeit            # 'schnell' oder 'zeit'
+        self.kurzbeschreibung = kurzbeschreibung
+        self.rezept_text = rezept_text
+
+
+class RezeptFinder:
+    def __init__(self):
+        self.rezepte = [
+             # 1. FLEISCH + SCHNELL
+            Rezept(
+                "Hähnchen-Pasta in Sahnesoße", 
+                "fleisch", 
+                "schnell", 
+                "Schnelle Hähnchen-Pasta mit einer cremigen Sahnesoße und Kräutern.", 
+                "ZUTATEN:\n"
+                "- 250g Pasta (z.B. Penne)\n"
+                "- 300g Hähnchenbrustfilet\n"
+                "- 200ml Schlagsahne\n"
+                "- 1 Knoblauchzehe, Olivenöl, Salz, Pfeffer, Italienische Kräuter\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Pasta in reichlich Salzwasser nach Packungsanleitung bissfest kochen.\n"
+                "2. Hähnchenbrust in mundgerechte Streifen schneiden und Knoblauch fein hacken.\n"
+                "3. Etwas Olivenöl in einer Pfanne erhitzen. Das Fleisch darin ca. 5-7 Minuten golden anbraten.\n"
+                "4. Den Knoblauch kurz mitanbraten, dann mit der Sahne ablöschen.\n"
+                "5. Mit Salz, Pfeffer und Kräutern würzen und die Soße ca. 3 Minuten leicht köcheln lassen.\n"
+                "6. Die gekochte Pasta direkt in die Pfanne geben, gut vermengen und heiß servieren."
+            ),
+            Rezept(
+                "Frikadellen mit frischem Salat", 
+                "fleisch", 
+                "schnell", 
+                "Klassische Frikadellen aus Hackfleisch serviert mit einem frischen Beilagensalat.", 
+                "ZUTATEN:\n"
+                "- 400g Gemischtes Hackfleisch\n"
+                "- 1 Ei, 1 Zwiebel\n"
+                "- 2 EL Semmelbrösel, Salz, Pfeffer, Paprikapulver\n"
+                "- Gemischter Salat und Dressing nach Wahl\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Zwiebel fein würfeln.\n"
+                "2. Hackfleisch mit Zwiebel, Ei, Semmelbröseln und Gewürzen in einer Schüssel gut verkneten.\n"
+                "3. Aus der Masse kleine Frikadellen formen.\n"
+                "4. Öl in einer Pfanne erhitzen und die Frikadellen von beiden Seiten bei mittlerer Hitze ca. 8-10 Minuten braten.\n"
+                "5. Den Salat waschen, anrichten und zusammen mit den heißen Frikadellen servieren."
+            ),
+
+            # 2. FLEISCH + ZEIT
+            Rezept(
+                "Klassischer Rinderbraten", 
+                "fleisch", 
+                "zeit", 
+                "Zarter Rinderbraten in kräftiger Dunkelbiersoße mit Wurzelgemüse.", 
+                "ZUTATEN:\n"
+                "- 800g Rinderbraten (z.B. Keule)\n"
+                "- 2 Karotten, 1/4 Sellerie, 2 Zwiebeln\n"
+                "- 500ml Rinderbrühe, 1 EL Tomatenmark, Butterfett, Salz, Pfeffer, Lorbeerblatt\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Das Fleisch gründlich trocken tupfen und kräftig mit Salz und Pfeffer einreiben.\n"
+                "2. Karotten, Sellerie und Zwiebeln schälen und in grobe Würfel schneiden.\n"
+                "3. Butterfett in einem großen Bräter erhitzen. Das Fleisch von allen Seiten scharf anbraten und herausnehmen.\n"
+                "4. Das Gemüse im Bräter anrösten, Tomatenmark dazugeben und kurz mitrösten.\n"
+                "5. Mit etwas Rinderbrühe ablöschen, Fleisch zurück in den Bräter legen und das Lorbeerblatt hinzufügen.\n"
+                "6. Bei schwacher Hitze mit geschlossenem Deckel ca. 2 Stunden sanft schmoren lassen.\n"
+                "7. Fleisch aufschneiden und die Soße durch ein Sieb passieren oder pürieren."
+            ),
+            Rezept(
+                "Deftiges Rindergulasch", 
+                "fleisch", 
+                "zeit", 
+                "Traditionelles Rindergulasch mit viel Zwiebeln und edelsüßem Paprika.", 
+                "ZUTATEN:\n"
+                "- 600g Rindergulasch\n"
+                "- 500g Zwiebeln\n"
+                "- 2 EL Paprikapulver (edelsüß), 1 EL Tomatenmark\n"
+                "- 400ml Fleischbrühe, Öl, Salz, Pfeffer, Kümmel\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Zwiebeln schälen und in feine Streifen schneiden.\n"
+                "2. Öl in einem Topf erhitzen, Fleisch portionsweise kräftig anbraten und herausnehmen.\n"
+                "3. Die Zwiebeln im selben Topf langsam goldbraun anbraten (ca. 10 Minuten).\n"
+                "4. Tomatenmark und Paprikapulver einrühren, kurz anschitzen und sofort mit der Brühe ablöschen.\n"
+                "5. Fleisch wieder dazugeben, würzen und abgedeckt ca. 1,5 bis 2 Stunden weich köcheln lassen."
+            ),
+
+            # 3. OHNE (VEGAN/VEGETARISCH) + SCHNELL
+            Rezept(
+                "Gemüse-Stir-Fry", 
+                "ohne", 
+                "schnell", 
+                "Bunt gemischtes Pfannengemüse mit Sojasoße und Sesam.", 
+                "ZUTATEN:\n"
+                "- 1 Paprika, 1 Brokkoli, 2 Karotten\n"
+                "- 100g Zuckerschoten, 3 EL Sojasoße\n"
+                "- 1 TL Sesamöl, 1 Knoblauchzehe, etwas Ingwer, Sesam\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Das gesamte Gemüse waschen und in mundgerechte Stücke schneiden.\n"
+                "2. Knoblauch und Ingwer fein reiben.\n"
+                "3. Öl in einer großen Pfanne oder einem Wok stark erhitzen.\n"
+                "4. Gemüse nach Garzeit hinzufügen (erst Karotten und Brokkoli, dann Paprika) und ca. 5 Minuten scharf anbraten.\n"
+                "5. Knoblauch, Ingwer und Sojasoße dazugeben und weitere 2 Minuten pfannenrühren.\n"
+                "6. Mit Sesam bestreuen und heiß servieren."
+            ),
+            Rezept(
+                "Tomaten-Avocado-Wrap", 
+                "ohne", 
+                "schnell", 
+                "Frischer, cremiger Wrap gefüllt mit Avocado, Kirschtomaten und Salat.", 
+                "ZUTATEN:\n"
+                "- 2 Tortilla-Wraps\n"
+                "- 1 reife Avocado\n"
+                "- 100g Kirschtomaten, Handvoll Pflücksalat\n"
+                "- Zitronensaft, Salz, Pfeffer\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Die Avocado schälen, das Fruchtfleisch mit einer Gabel zerdrücken und mit etwas Zitronensaft, Salz und Pfeffer würzen.\n"
+                "2. Kirschtomaten halbieren, Salat waschen.\n"
+                "3. Die Wraps kurz in einer Pfanne ohne Öl erwärmen.\n"
+                "4. Die Avocadocreme auf den Wraps verstreichen, mit Tomaten und Salat belegen.\n"
+                "5. Die Seiten leicht einklappen und stramm aufrollen."
+            ),
+
+            # 4. OHNE (VEGAN/VEGETARISCH) + ZEIT
+            Rezept(
+                "Herzhafter Linseneintopf", 
+                "ohne", 
+                "zeit", 
+                "Traditioneller Linseneintopf mit Suppengrün und Kartoffeln.", 
+                "ZUTATEN:\n"
+                "- 250g Tellerlinsen (getrocknet)\n"
+                "- 1 Bund Suppengrün (Karotte, Sellerie, Lauch)\n"
+                "- 2 Kartoffeln, 1 l Gemüsebrühe\n"
+                "- 2 EL Essig, Salz, Pfeffer, Majoran\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Suppengrün und Kartoffeln schälen und in kleine Würfel schneiden.\n"
+                "2. Etwas Öl in einem großen Topf erhitzen und das Gemüse kurz anrösten.\n"
+                "3. Die Linsen dazugeben und mit der Gemüsebrühe aufgießen.\n"
+                "4. Mit Majoran würzen und abgedeckt ca. 45 Minuten sanft köcheln lassen, bis die Linsen weich sind.\n"
+                "5. Zum Schluss mit Salz, Pfeffer und einem Schuss Essig abschmecken."
+            ),
+            Rezept(
+                "Selbstgemachte Gemüse-Lasagne", 
+                "ohne", 
+                "zeit", 
+                "Klassische Schicht-Lasagne mit fruchtiger Gemüsesoße und Béchamel.", 
+                "ZUTATEN:\n"
+                "- Lasagneplatten (ohne Vorkochen)\n"
+                "- 1 Zucchini, 1 Paprika, 400g gehackte Tomaten (Dose)\n"
+                "- 50g Butter, 50g Mehl, 500ml Milch (Béchamelsoße)\n"
+                "- 150g Geriebener Käse, Gewürze\n\n"
+                "ZUBEREITUNG:\n"
+                "1. Zucchini und Paprika würfeln, kurz anbraten und mit den gehackten Tomaten verfeinern (Tomatensoße).\n"
+                "2. Für die Béchamelsoße Butter schmelzen, Mehl einrühren und nach und nach mit Milch aufgießen. Aufkochen lassen und würzen.\n"
+                "3. In einer Auflaufform abwechselnd Béchamel, Lasagneplatten und Gemüsesoße schichten.\n"
+                "4. Die oberste Schicht mit Béchamel abdecken und mit dem geriebenen Käse bestreuen.\n"
+                "5. Im vorgeheizten Ofen bei 180°C Ober-/Unterhitze ca. 35-40 Minuten goldbraun backen."
+            )
+        ]
+
+    def rezept_finder(self, kategorie, zeit):
+        passende = [r for r in self.rezepte if r.kategorie == kategorie and r.zeit == zeit]
+        if passende:
+            return random.choice(passende)
+        return None
+    
+
+class RezeptApp:
+    def __init__(self, root):
+        self.finder = RezeptFinder()
+        self.root = root
+        self.root.title("Rezept-Empfehlungssystem")
+        self.root.geometry("500x680")
+        self.root.config(bg="#f4f4f9")
+
+        self.aktives_rezept = None
+
+        # Titel
+        title_label = tk.Label(
+            root,
+            text="🍳 Rezept-Empfehlungssystem",
+            font=("Arial", 14, "bold"),
+            bg="#f4f4f9",
+            fg="#333333",
+        )
+        title_label.pack(pady=10)
+
+        # 1. Kategorie-Auswahl
+        frame_kat = tk.LabelFrame(
+            root,
+            text=" Was möchten Sie essen? ",
+            font=("Arial", 10, "bold"),
+            bg="#f4f4f9",
+            padx=10,
+            pady=5,
+        )
+        frame_kat.pack(fill="x", padx=20, pady=5)
+
+        self.kat_var = tk.StringVar(value="fleisch")
+        tk.Radiobutton(
+            frame_kat,
+            text="Fleisch",
+            variable=self.kat_var,
+            value="fleisch",
+            bg="#f4f4f9",
+            font=("Arial", 10),
+        ).pack(anchor="w")
+        tk.Radiobutton(
+            frame_kat,
+            text="Ohne Fleisch",
+            variable=self.kat_var,
+            value="ohne",
+            bg="#f4f4f9",
+            font=("Arial", 10),
+        ).pack(anchor="w")
+
+        # 2. Zeit-Auswahl
+        frame_zeit = tk.LabelFrame(
+            root,
+            text=" Wie viel Zeit haben Sie? ",
+            font=("Arial", 10, "bold"),
+            bg="#f4f4f9",
+            padx=10,
+            pady=5,
+        )
+        frame_zeit.pack(fill="x", padx=20, pady=5)
+
+        self.zeit_var = tk.StringVar(value="schnell")
+        tk.Radiobutton(
+            frame_zeit,
+            text="Schnell",
+            variable=self.zeit_var,
+            value="schnell",
+            bg="#f4f4f9",
+            font=("Arial", 10),
+        ).pack(anchor="w")
+        tk.Radiobutton(
+            frame_zeit,
+            text="Zeit (mehr Zeit)",
+            variable=self.zeit_var,
+            value="zeit",
+            bg="#f4f4f9",
+            font=("Arial", 10),
+        ).pack(anchor="w")
+
+        # Such-Button
+        search_btn = tk.Button(
+            root,
+            text="Rezept finden",
+            command=self.rezept_suchen,
+            font=("Arial", 11, "bold"),
+            bg="#4CAF50",
+            fg="white",
+            padx=10,
+            pady=5,
+        )
+        search_btn.pack(pady=10)
+
+        # Textfeld für Ergebnisse
+        self.result_text = tk.Text(
+            root,
+            height=10,
+            width=55,
+            font=("Arial", 9),
+            wrap="word",
+            bg="white",
+            fg="#333333",
+        )
+        self.result_text.pack(padx=20, pady=5)
+        self.result_text.config(state="disabled")
+
+        # Feedback-Frame (Buttons: Gefällt mir / Anderes Rezept)
+        frame_feedback = tk.Frame(root, bg="#f4f4f9")
+        frame_feedback.pack(pady=5)
+
+        self.btn_like = tk.Button(
+            frame_feedback,
+            text="👍 Gefällt mir (Rezept anzeigen)",
+            command=self.rezept_akzeptiert,
+            font=("Arial", 9, "bold"),
+            bg="#2196F3",
+            fg="white",
+            state="disabled"
+        )
+        self.btn_like.pack(side="left", padx=5)
+
+        self.btn_dislike = tk.Button(
+            frame_feedback,
+            text="👎 Anderes Rezept",
+            command=self.rezept_ablehnen,
+            font=("Arial", 9, "bold"),
+            bg="#FF9800",
+            fg="white",
+            state="disabled"
+        )
+        self.btn_dislike.pack(side="left", padx=5)
+
+    def rezept_suchen(self):
+        kat = self.kat_var.get()
+        zeit = self.zeit_var.get()
+        self.aktives_rezept = self.finder.rezept_finder(kat, zeit)
+        
+        self.result_text.config(state="normal")
+        self.result_text.delete("1.0", tk.END)
+
+        if self.aktives_rezept:
+            output = (
+                f"Vorschlag:\n"
+                f"📌 {self.aktives_rezept.name}\n\n"
+                f"Beschreibung: {self.aktives_rezept.kurzbeschreibung}\n\n"
+                "Gefällt Ihnen diese Idee?"
+            )
+            self.result_text.insert(tk.END, output)
+            self.btn_like.config(state="normal")
+            self.btn_dislike.config(state="normal")
+        else:
+            self.result_text.insert(
+                tk.END,
+                "Leider kein passendes Rezept gefunden. Bitte überprüfen Sie Ihre Eingabe."
+            )
+            self.btn_like.config(state="disabled")
+            self.btn_dislike.config(state="disabled")
+
+        self.result_text.config(state="disabled")
+
+    def rezept_akzeptiert(self):
+        if self.aktives_rezept:
+            self.result_text.config(state="normal")
+            output = (
+                f"✅ Ausgewähltes Rezept: {self.aktives_rezept.name}\n"
+                f"Beschreibung: {self.aktives_rezept.kurzbeschreibung}\n\n"
+                "------------------------------------------\n"
+                f"VOLLSTÄNDIGES REZEPT:\n{self.aktives_rezept.rezept_text}\n"
+                "------------------------------------------\n"
+                "Guten Appetit!"
+            )
+            self.result_text.delete("1.0", tk.END)
+            self.result_text.insert(tk.END, output)
+            self.result_text.config(state="disabled")
+
+    def rezept_ablehnen(self):
+        self.rezept_suchen()
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = RezeptApp(root)
+    root.mainloop()
